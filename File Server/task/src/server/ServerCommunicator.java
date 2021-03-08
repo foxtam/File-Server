@@ -16,15 +16,14 @@ public class ServerCommunicator {
         this.output = output;
     }
 
-    public void run() throws IOException {
-        while (true) {
-            String stringRequest = input.readUTF();
-            if (stringRequest.equals(RequestConstants.EXIT)) {
-                return;
-            } else {
-                output.writeUTF(
-                        Request.of(stringRequest).perform());
-            }
+    public boolean run() throws IOException {
+        String stringRequest = input.readUTF();
+        if (stringRequest.equals(RequestConstants.EXIT)) {
+            return false;
+        } else {
+            output.writeUTF(
+                    Request.of(stringRequest).perform());
+            return true;
         }
     }
 }

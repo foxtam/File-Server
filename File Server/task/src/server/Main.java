@@ -26,12 +26,15 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByName(host))) {
             System.out.println("Server started!");
 
-            try (Socket socket = serverSocket.accept();
-                 var input = new DataInputStream(socket.getInputStream());
-                 var output = new DataOutputStream(socket.getOutputStream())) {
+            boolean continued;
+            do {
+                try (Socket socket = serverSocket.accept();
+                     var input = new DataInputStream(socket.getInputStream());
+                     var output = new DataOutputStream(socket.getOutputStream())) {
 
-                new ServerCommunicator(input, output).run();
-            }
+                    continued = new ServerCommunicator(input, output).run();
+                }
+            } while (continued);
         }
     }
 }

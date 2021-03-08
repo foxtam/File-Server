@@ -21,22 +21,20 @@ public class ClientCommunicator {
     }
 
     public void run() throws IOException {
-        while (true) {
-            System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file): ");
-            String input = scanner.nextLine();
-            if (input.equals(RequestConstants.EXIT.toLowerCase(Locale.ROOT))) {
-                exit();
-                return;
-            }
+        System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file): ");
+        String input = scanner.nextLine();
+        if (input.equals(RequestConstants.EXIT.toLowerCase(Locale.ROOT))) {
+            exit();
+            return;
+        }
 
-            int answer = Integer.parseInt(input);
-            if (answer == 1) {
-                getFile();
-            } else if (answer == 2) {
-                createFile();
-            } else if (answer == 3) {
-                deleteFile();
-            }
+        int answer = Integer.parseInt(input);
+        if (answer == 1) {
+            getFile();
+        } else if (answer == 2) {
+            createFile();
+        } else if (answer == 3) {
+            deleteFile();
         }
     }
 
