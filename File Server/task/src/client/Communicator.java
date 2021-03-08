@@ -42,7 +42,7 @@ public class Communicator {
         System.out.println("The request was sent.");
 
         var response = new Response(input.readUTF());
-        if (response.code() == Response.FILE_CONTENT_SENT_CODE) {
+        if (response.code() == Response.OK_CODE) {
             System.out.println("The content of the file is: " + response.content());
         } else if (response.code() == Response.NO_FILE_CODE) {
             System.out.println("The response says that the file was not found!");
@@ -62,7 +62,7 @@ public class Communicator {
         System.out.println("The request was sent.");
 
         var response = new Response(input.readUTF());
-        if (response.code() == Response.FILE_CREATED_CODE) {
+        if (response.code() == Response.OK_CODE) {
             System.out.println("The response says that file was created!");
         } else if (response.code() == Response.FILE_ALREADY_EXISTS_CODE) {
             System.out.println("The response says that creating the file was forbidden!");
