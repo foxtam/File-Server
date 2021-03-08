@@ -1,10 +1,12 @@
 package client;
 
+import core.RequestConstants;
 import core.Response;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class ClientCommunicator {
@@ -22,7 +24,7 @@ public class ClientCommunicator {
         while (true) {
             System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file): ");
             String input = scanner.nextLine();
-            if (input.equals("exit")) {
+            if (input.equals(RequestConstants.EXIT.toLowerCase(Locale.ROOT))) {
                 exit();
                 return;
             }
@@ -39,7 +41,7 @@ public class ClientCommunicator {
     }
 
     private void exit() throws IOException {
-        output.writeUTF("EXIT");
+        output.writeUTF(RequestConstants.EXIT);
         System.out.println("The request was sent.");
     }
 
