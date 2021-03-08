@@ -20,18 +20,27 @@ public class Communicator {
 
     public void run() throws IOException {
         while (true) {
-            System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file, 4 - exit): ");
-            int answer = Integer.parseInt(scanner.nextLine());
+            System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file): ");
+            String input = scanner.nextLine();
+            if (input.equals("exit")) {
+                exit();
+                return;
+            }
+            
+            int answer = Integer.parseInt(input);
             if (answer == 1) {
                 getFile();
             } else if (answer == 2) {
                 createFile();
             } else if (answer == 3) {
                 deleteFile();
-            } else if (answer == 4) {
-                return;
             }
         }
+    }
+
+    private void exit() throws IOException {
+        output.writeUTF("EXIT");
+        System.out.println("The request was sent.");
     }
 
     private void getFile() throws IOException {
