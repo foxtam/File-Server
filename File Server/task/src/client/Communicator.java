@@ -70,4 +70,21 @@ public class Communicator {
             throw new IllegalStateException(response.toString());
         }
     }
+
+    private void deleteFile() throws IOException {
+        System.out.print("Enter filename: ");
+        String fileName = scanner.nextLine();
+
+        output.writeUTF("DEL " + fileName);
+        System.out.println("The request was sent.");
+
+        var response = new Response(input.readUTF());
+        if (response.code() == Response.OK_CODE) {
+            System.out.println("The response says that the file was successfully deleted!");
+        } else if (response.code() == Response.NO_FILE_CODE) {
+            System.out.println("The response says that the file was not found!");
+        } else {
+            throw new IllegalStateException(response.toString());
+        }
+    }
 }
