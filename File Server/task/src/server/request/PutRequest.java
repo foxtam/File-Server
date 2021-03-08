@@ -18,6 +18,8 @@ public class PutRequest extends Request {
         if (Files.exists(filePath)) {
             return "" + Response.FILE_ALREADY_EXISTS_CODE;
         } else {
+            Files.createDirectories(storagePath);
+            Files.createFile(filePath);
             Files.writeString(filePath, content);
             return "" + Response.OK_CODE;
         }
