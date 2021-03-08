@@ -1,15 +1,20 @@
 package server.request;
 
-import java.io.File;
+import core.Response;
+
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class GetRequest extends Request {
 
     public GetRequest(String fileName) {
-        super(new File(fileName));
+        super(fileName);
     }
 
     @Override
-    public String perform() {
-        return null;
+    public String perform() throws IOException {
+        return Files.exists(filePath)
+                ? "" + Response.OK_CODE + " " + Files.readString(filePath)
+                : "" + Response.NO_FILE_CODE;
     }
 }
