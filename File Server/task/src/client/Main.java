@@ -22,7 +22,7 @@ public class Main {
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-        try (socket; dataInputStream; dataOutputStream) {
+        try (dataInputStream; dataOutputStream) {
             dataOutputStream.writeUTF(sendMessage);
             System.out.println("Sent: " + sendMessage);
 

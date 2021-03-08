@@ -15,8 +15,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByName(host))) {
             System.out.println("Server started!");
-            Socket socket = serverSocket.accept();
-            communicate(socket);
+            try (Socket socket = serverSocket.accept()) {
+                communicate(socket);
+            }
         }
     }
 
@@ -24,7 +25,7 @@ public class Main {
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-        try (socket; dataInputStream; dataOutputStream) {
+        try (dataInputStream; dataOutputStream) {
             String inputMsg = dataInputStream.readUTF();
             System.out.println("Received: " + inputMsg);
 
