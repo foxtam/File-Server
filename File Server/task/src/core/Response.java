@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Arrays;
+
 public class Response {
     public static final int NO_FILE_CODE = 404;
     public static final int OK_CODE = 200;
@@ -9,6 +11,13 @@ public class Response {
 
     public Response(String response) {
         this.response = response.split("\\s+");
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "response=" + Arrays.toString(response) +
+                '}';
     }
 
     public int code() {
