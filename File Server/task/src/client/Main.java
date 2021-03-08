@@ -12,22 +12,20 @@ public class Main {
     private static final String sendMessage = "Give me everything you have!";
 
     public static void main(String[] args) throws IOException {
-        try (Socket socket = new Socket(InetAddress.getByName(host), port)) {
+        try (var socket = new Socket(InetAddress.getByName(host), port);
+             var input = new DataInputStream(socket.getInputStream());
+             var output = new DataOutputStream(socket.getOutputStream())) {
+
             System.out.println("Client started!");
-            communicate(socket);
+            communicate(input, output);
         }
     }
 
-    private static void communicate(Socket socket) throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+    private static void communicate(DataInputStream input, DataOutputStream output) throws IOException {
+        output.writeUTF(sendMessage);
+        System.out.println("Sent: " + sendMessage);
 
-        try (dataInputStream; dataOutputStream) {
-            dataOutputStream.writeUTF(sendMessage);
-            System.out.println("Sent: " + sendMessage);
-
-            String inputMsg = dataInputStream.readUTF();
-            System.out.println("Received: " + inputMsg);
-        }
+        String inputMsg = input.readUTF();
+        System.out.println("Received: " + inputMsg);
     }
 }
