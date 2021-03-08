@@ -2,13 +2,15 @@ package server.request;
 
 import core.RequestConstants;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public abstract class Request {
-    protected File file;
+    protected static Path storagePath = Path.of(".").resolve("server").resolve("data");
+    protected final Path filePath;
 
-    protected Request(File file) {
-        this.file = file;
+    protected Request(String fileName) {
+        this.filePath = storagePath.resolve(fileName);
     }
 
     public static Request of(String requestString) {
@@ -26,5 +28,5 @@ public abstract class Request {
         }
     }
 
-    public abstract String perform();
+    public abstract String perform() throws IOException;
 }
