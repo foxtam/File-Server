@@ -1,16 +1,16 @@
 package server.request;
 
 import core.RequestConstants;
+import server.Main;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 public abstract class Request {
-    protected static Path storagePath = Path.of(".").resolve("server").resolve("data");
     protected final Path filePath;
 
     protected Request(String fileName) {
-        this.filePath = storagePath.resolve(fileName);
+        this.filePath = Main.storagePath.resolve(fileName);
     }
 
     public static Request of(String requestString) {
