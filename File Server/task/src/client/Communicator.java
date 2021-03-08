@@ -45,11 +45,33 @@ public class Communicator {
         output.writeUTF("GET " + fileName);
         System.out.println("The request was sent.");
 
-        Response response = new Response(input.readUTF());
-        if (response.code() == Response.GOOD_CODE) {
+        var response = new Response(input.readUTF());
+        if (response.code() == Response.FILE_CONTENT_SENT_CODE) {
             System.out.println("The content of the file is: " + response.content());
         } else if (response.code() == Response.NO_FILE_CODE) {
             System.out.println("The response says that the file was not found!");
+        } else {
+            throw new IllegalStateException(response.toString());
+        }
+    }
+
+    private void createFile() throws IOException {
+        System.out.print("Enter filename: ");
+        String fileName = scanner.nextLine();
+
+        System.out.print("Enter file content: ");
+        String content = scanner.nextLine();
+
+        output.writeUTF("PUT " + fileName + " " + content);
+        System.out.println("The request was sent.");
+
+        var response = new Response(input.readUTF());
+        if (response.code() == Response.FILE_CREATED_CODE) {
+            System.out.println("The response says that file was created!");
+        } else if (response.code() == Response.FILE_ALREADY_EXISTS_CODE) {
+            System.out.println("The response says that creating the file was forbidden!");
+        } else {
+            throw new IllegalStateException(response.toString());
         }
     }
 }
