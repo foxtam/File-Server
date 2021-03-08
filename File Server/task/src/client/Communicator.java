@@ -22,18 +22,14 @@ public class Communicator {
         while (true) {
             System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file, 4 - exit): ");
             int answer = Integer.parseInt(scanner.nextLine());
-            switch (answer) {
-                case 1:
-                    getFile();
-                    break;
-                case 2:
-                    createFile();
-                    break;
-                case 3:
-                    deleteFile();
-                    break;
-                case 4:
-                    return;
+            if (answer == 1) {
+                getFile();
+            } else if (answer == 2) {
+                createFile();
+            } else if (answer == 3) {
+                deleteFile();
+            } else if (answer == 4) {
+                return;
             }
         }
     }
