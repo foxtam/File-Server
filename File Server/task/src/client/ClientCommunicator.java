@@ -7,13 +7,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Communicator {
+public class ClientCommunicator {
     private static final Scanner scanner = new Scanner(System.in);
 
     private final DataInputStream input;
     private final DataOutputStream output;
 
-    public Communicator(DataInputStream input, DataOutputStream output) {
+    public ClientCommunicator(DataInputStream input, DataOutputStream output) {
         this.input = input;
         this.output = output;
     }
@@ -26,7 +26,7 @@ public class Communicator {
                 exit();
                 return;
             }
-            
+
             int answer = Integer.parseInt(input);
             if (answer == 1) {
                 getFile();

@@ -16,7 +16,7 @@ public class Main {
              var output = new DataOutputStream(socket.getOutputStream())) {
 
             System.out.println("Client started!");
-            new Communicator(input, output).run();
+            new ClientCommunicator(input, output).run();
         }
     }
 }
