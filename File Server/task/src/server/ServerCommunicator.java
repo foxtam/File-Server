@@ -1,5 +1,6 @@
 package server;
 
+import core.RequestConstants;
 import server.request.Request;
 
 import java.io.DataInputStream;
@@ -17,7 +18,13 @@ public class ServerCommunicator {
 
     public void run() throws IOException {
         while (true) {
-            Request request = Request.of(input.readUTF());
+            String stringRequest = input.readUTF();
+            if (stringRequest.equals(RequestConstants.EXIT)) {
+                return;
+            } else {
+                output.writeUTF(
+                        Request.of(stringRequest).perform());
+            }
         }
     }
 }
