@@ -91,22 +91,43 @@ public class ClientCommunicator {
         printSaveFileResponse();
     }
 
-        var response = new Response(input.readUTF());
-        if (response.code() == Response.OK_CODE) {
-            System.out.println("The response says that file was created!");
-        } else if (response.code() == Response.FILE_ALREADY_EXISTS_CODE) {
-            System.out.println("The response says that creating the file was forbidden!");
+    private void deleteFile() throws IOException {
+        System.out.print("Do you want to delete the file by name or by id (1 - name, 2 - id): ");
+        int identificationType = Integer.parseInt(scanner.nextLine());
+        output.writeUTF(RequestType.DEL);
+        sendFileIdentification(identificationType);
+        System.out.println("The request was sent.");
+
+        int response = input.readInt();
+        if (response == Codes.OK_CODE) {
+            System.out.println("The response says that the file was successfully deleted!");
+        } else if (response == Codes.NO_FILE_CODE) {
+            System.out.println("The response says that this file is not found!");
         } else {
-            throw new IllegalStateException(response.toString());
+            throw new IllegalStateException("" + response);
         }
     }
 
-    private void deleteFile() throws IOException {
-        System.out.print("Enter filename: ");
-        String fileName = scanner.nextLine();
+    private void sendFileIdentification(int identificationType) throws IOException {
+        if (identificationType == 1) {
+            System.out.print("Enter filename: ");
+            String fileName = scanner.nextLine();
+            output.writeUTF(IdentificationFileType.BY_NAME);
+            output.writeUTF(fileName);
+        } else if (identificationType == 2) {
+            System.out.print("Enter id: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            output.writeUTF(IdentificationFileType.BY_ID);
+            output.writeInt(id);
+        }
+    }
 
-        output.writeUTF("DEL " + fileName);
-        System.out.println("The request was sent.");
+    private void writeInputToFile(String fileName) throws IOException {
+        int fileLength = input.readInt();
+        byte[] content = new byte[fileLength];
+        input.readFully(content);
+        Files.write(storagePath.resolve(fileName), content);
+    }
 
         var response = new Response(input.readUTF());
         if (response.code() == Response.OK_CODE) {
