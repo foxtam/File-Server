@@ -1,16 +1,28 @@
 package client;
 
-import core.RequestConstants;
-import core.Response;
+import core.Codes;
+import core.IdentificationFileType;
+import core.RequestType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Locale;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class ClientCommunicator {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final Path storagePath =
+            Path.of(System.getProperty("user.dir"), "src", "client", "data");
+
+    static {
+        try {
+            Files.createDirectories(storagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private final DataInputStream input;
     private final DataOutputStream output;
