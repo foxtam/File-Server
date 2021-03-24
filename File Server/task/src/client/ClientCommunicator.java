@@ -56,19 +56,22 @@ public class ClientCommunicator {
     }
 
     private void getFile() throws IOException {
-        System.out.print("Enter filename: ");
-        String fileName = scanner.nextLine();
-
-        output.writeUTF("GET " + fileName);
+        System.out.print("Do you want to get the file by name or by id (1 - name, 2 - id): ");
+        int identificationType = Integer.parseInt(scanner.nextLine());
+        output.writeUTF(RequestType.GET);
+        sendFileIdentification(identificationType);
         System.out.println("The request was sent.");
 
-        var response = new Response(input.readUTF());
-        if (response.code() == Response.OK_CODE) {
-            System.out.println("The content of the file is: " + response.content());
-        } else if (response.code() == Response.NO_FILE_CODE) {
-            System.out.println("The response says that the file was not found!");
+        int response = input.readInt();
+        if (response == Codes.OK_CODE) {
+            System.out.print("The file was downloaded! Specify a name for it: ");
+            String fileName = scanner.nextLine();
+            writeInputToFile(fileName);
+            System.out.println("File saved on the hard drive!");
+        } else if (response == Codes.NO_FILE_CODE) {
+            System.out.println("The response says that this file is not found!");
         } else {
-            throw new IllegalStateException(response.toString());
+            throw new IllegalStateException("" + response);
         }
     }
 
