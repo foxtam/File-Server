@@ -35,7 +35,7 @@ public class ClientCommunicator {
     public void run() throws IOException {
         System.out.print("Enter action (1 - get a file, 2 - save a file, 3 - delete a file): ");
         String input = scanner.nextLine();
-        if (input.equals(RequestConstants.EXIT.toLowerCase(Locale.ROOT))) {
+        if (input.equals(RequestType.EXIT.toLowerCase())) {
             exit();
             return;
         }
@@ -51,7 +51,7 @@ public class ClientCommunicator {
     }
 
     private void exit() throws IOException {
-        output.writeUTF(RequestConstants.EXIT);
+        output.writeUTF(RequestType.EXIT);
         System.out.println("The request was sent.");
     }
 
