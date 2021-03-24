@@ -129,13 +129,24 @@ public class ClientCommunicator {
         Files.write(storagePath.resolve(fileName), content);
     }
 
-        var response = new Response(input.readUTF());
-        if (response.code() == Response.OK_CODE) {
-            System.out.println("The response says that the file was successfully deleted!");
-        } else if (response.code() == Response.NO_FILE_CODE) {
-            System.out.println("The response says that the file was not found!");
+    private void send(String localFileName, String remoteFileName) throws IOException {
+        output.writeUTF(RequestType.PUT);
+        output.writeUTF(remoteFileName);
+
+        byte[] content = Files.readAllBytes(storagePath.resolve(localFileName));
+        output.writeInt(content.length);
+        output.write(content);
+    }
+
+    private void printSaveFileResponse() throws IOException {
+        int responseCode = input.readInt();
+        if (responseCode == Codes.OK_CODE) {
+            int fileId = input.readInt();
+            System.out.println("Response says that file is saved! ID = " + fileId);
+        } else if (responseCode == Codes.FILE_ALREADY_EXISTS_CODE) {
+            System.out.println("The response says that creating the file was forbidden!");
         } else {
-            throw new IllegalStateException(response.toString());
+            throw new IllegalStateException("" + responseCode);
         }
     }
 }
