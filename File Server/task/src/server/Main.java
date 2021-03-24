@@ -1,40 +1,51 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.SocketException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     private static final String host = "127.0.0.1";
     private static final int port = 34567;
-    public static Path storagePath = Path.of(System.getProperty("user.dir"), "src", "server", "data");
+    private static ServerSocket staticServerSocket;
 
-    static {
-        try {
-            Files.createDirectories(storagePath);
+    public static void main(String[] args) throws IOException {
+        staticServerSocket = new ServerSocket(port, 50, InetAddress.getByName(host));
+        try (ServerSocket serverSocket = staticServerSocket) {
+            int poolSize = Runtime.getRuntime().availableProcessors();
+            ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+            System.out.println("Server started!");
+
+            try {
+                //noinspection InfiniteLoopStatement
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    executor.submit(() -> communicate(socket));
+                }
+            } catch (SocketException ignored) {
+            }
+
+            executor.shutdown();
+        }
+    }
+
+    private static void communicate(Socket socket) {
+        try (socket) {
+            new ServerCommunicator(socket, Main::shutdownServer).run();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(port, 50, InetAddress.getByName(host))) {
-            System.out.println("Server started!");
-
-            boolean continued;
-            do {
-                try (Socket socket = serverSocket.accept();
-                     var input = new DataInputStream(socket.getInputStream());
-                     var output = new DataOutputStream(socket.getOutputStream())) {
-
-                    continued = new ServerCommunicator(input, output).run();
-                }
-            } while (continued);
+    public static void shutdownServer() {
+        try {
+            staticServerSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
