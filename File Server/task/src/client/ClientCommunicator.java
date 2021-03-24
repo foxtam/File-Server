@@ -82,11 +82,14 @@ public class ClientCommunicator {
         System.out.print("Enter name of the file to be saved on server: ");
         String remoteFileName = scanner.nextLine();
 
-        System.out.print("Enter file content: ");
-        String content = scanner.nextLine();
+        if (remoteFileName.isBlank()) {
+            remoteFileName = localFileName;
+        }
 
-        output.writeUTF("PUT " + fileName + " " + content);
+        send(localFileName, remoteFileName);
         System.out.println("The request was sent.");
+        printSaveFileResponse();
+    }
 
         var response = new Response(input.readUTF());
         if (response.code() == Response.OK_CODE) {
