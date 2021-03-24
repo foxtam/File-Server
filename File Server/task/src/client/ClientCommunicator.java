@@ -33,7 +33,7 @@ public class ClientCommunicator {
     }
 
     public void run() throws IOException {
-        System.out.print("Enter action (1 - get a file, 2 - create a file, 3 - delete a file): ");
+        System.out.print("Enter action (1 - get a file, 2 - save a file, 3 - delete a file): ");
         String input = scanner.nextLine();
         if (input.equals(RequestConstants.EXIT.toLowerCase(Locale.ROOT))) {
             exit();
@@ -44,7 +44,7 @@ public class ClientCommunicator {
         if (answer == 1) {
             getFile();
         } else if (answer == 2) {
-            createFile();
+            saveFile();
         } else if (answer == 3) {
             deleteFile();
         }
@@ -72,9 +72,12 @@ public class ClientCommunicator {
         }
     }
 
-    private void createFile() throws IOException {
-        System.out.print("Enter filename: ");
-        String fileName = scanner.nextLine();
+    private void saveFile() throws IOException {
+        System.out.print("Enter name of the file: ");
+        String localFileName = scanner.nextLine();
+
+        System.out.print("Enter name of the file to be saved on server: ");
+        String remoteFileName = scanner.nextLine();
 
         System.out.print("Enter file content: ");
         String content = scanner.nextLine();
